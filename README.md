@@ -20,7 +20,7 @@ Usage: star_trek_date <language> [-d|--debug] [-l|--list]
 
 ## Examples
 
-'''
+```
 $ star_trek_date klingon
 Today's date in Klingon is: wejleS jaj 19, jar jar
 ```
