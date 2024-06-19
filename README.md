@@ -29,3 +29,12 @@ Today's date in Klingon is: wejleS jaj 19, jar jar
 $ star_trek_date vulcan
 Today's date in Vulcan is: klosh wak 19, t'vash shen
 ```
+
+```
+$ star_trek_date vulcan --list
+Available languages:
+bajoran
+klingon
+romulan
+vulcan
+```
