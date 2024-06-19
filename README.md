@@ -15,7 +15,7 @@ Copy the file in bash.d/* to your $HOME/.bash.d directory, and make sure your $H
 
 ## Usage
 
-Usage: star_trek_date <language> [-d|--debug] [-l|--list]
+Usage: star_trek_date [-d] [-l] <language>
 
 
 ## Examples
@@ -31,7 +31,19 @@ Today's date in Vulcan is: klosh wak 19, t'vash shen
 ```
 
 ```
-$ star_trek_date vulcan --list
+$ star_trek_date -d vulcan
+DEBUG: Current day: 19
+DEBUG: Current month: June
+DEBUG: Current day of week: 3
+DEBUG: Day label: wak
+DEBUG: Month label: shen
+DEBUG: Day of week label: klosh
+DEBUG: Month of year label: t'vash
+Today's date in Vulcan is: klosh wak 19, t'vash shen
+```
+
+```
+$ star_trek_date -l
 Available languages:
 bajoran
 klingon
