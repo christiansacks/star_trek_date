@@ -63,31 +63,38 @@ translate_date() {
 
 # Check for command line arguments
 if [ $# -eq 0 ]; then
-    echo "Usage: $(basename $0) <language> [-d|--debug] [-l|--list]"
+    echo "Usage: $(basename $0) [-d] [-l] <language>"
     exit 1
 fi
 
-# Parse command line arguments
-language=${1,,}
-shift
-args=${1,,}
-while [[ "$args" ]]; do
-    case $args in
-        -d|--debug)
-            DEBUG=true
-            ;;
-        -l|--list)
+# Parse command line options using getopts
+while getopts "ld" opt; do
+    case ${opt} in
+        l)  # List available languages
             list_languages
             exit 0
             ;;
-        *)
-            echo "Unknown option: $1"
-            echo "Usage: $0 <language> [-d|--debug] [-l|--list]"
+        d)  # Enable debug mode
+            DEBUG=true
+            ;;
+        \?) # Invalid option
+            echo "Invalid option: -$OPTARG"
             exit 1
             ;;
     esac
-    shift
 done
+
+# Shift to the positional arguments after options
+shift $((OPTIND -1))
+
+# If no positional arguments left after processing options, show usage
+if [ $# -eq 0 ]; then
+    echo "Usage: $(basename $0) [-d] [-l] <language>"
+    exit 1
+fi
+
+# The first remaining argument should be the language
+language=$1
 
 # Call the function with the provided language
 translate_date "$language"
