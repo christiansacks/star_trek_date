@@ -6,7 +6,7 @@ _star_trek_date_complete()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="$(star_trek_date vulcan -l|grep -v '^Available languages')"
+    opts="$(star_trek_date -l|grep -v '^Available languages')"
 
     if [ ${COMP_CWORD} = 1 ]; then
 	 COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
