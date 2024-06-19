@@ -20,12 +20,12 @@ Usage: star_trek_date <language> [-d|--debug] [-l|--list]
 
 ## Examples
 
-'''bash
+'''
 $ star_trek_date klingon
 Today's date in Klingon is: wejleS jaj 19, jar jar
 ```
 
-```bash
+```
 $ star_trek_date vulcan
 Today's date in Vulcan is: klosh wak 19, t'vash shen
 ```
