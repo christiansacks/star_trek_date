@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Configuration file path
+CONFIG_DIR="$(dirname $0)"
+CONFIG_FILE="${CONFIG_DIR}/star_trek_languages.conf"
+DEBUG=false
+
+# Function to display debug messages
+debug() {
+    if [ "$DEBUG" = true ]; then
+        echo "DEBUG: $1"
+    fi
+}
+
+# Function to list available languages
+list_languages() {
+    echo "Available languages:"
+    grep -E "^[a-zA-Z_]+ " "$CONFIG_FILE"|awk '{print $1}'|grep -v _|sort -u
+}
+
+# Function to translate date to a fictional language
+translate_date() {
+    local language=$1
+    local day_label=""
+    local month_label=""
+    local day_of_week_label=""
+    local month_of_year_label=""
+    
+    # Get the current day, month, and day of week
+    current_day=$(date +%d)
+    current_month=$(date +%B)
+    current_day_of_week=$(date +%u)
+
+    debug "Current day: $current_day"
+    debug "Current month: $current_month"
+    debug "Current day of week: $current_day_of_week"
+
+    # Read the configuration file and get the labels
+    while IFS= read -r line; do
+        if [[ $line == "$language "* ]]; then
+            day_label=$(echo $line | awk '{print $2}')
+            month_label=$(echo $line | awk '{print $3}')
+        elif [[ $line == "${language}_day $current_day_of_week "* ]]; then
+            day_of_week_label=$(echo $line | awk '{print $3}')
+        elif [[ $line == "${language}_month $current_month "* ]]; then
+            month_of_year_label=$(echo $line | awk '{print $3}')
+        fi
+    done < "$CONFIG_FILE"
+
+    debug "Day label: $day_label"
+    debug "Month label: $month_label"
+    debug "Day of week label: $day_of_week_label"
+    debug "Month of year label: $month_of_year_label"
+
+    if [ -z "$day_label" ] || [ -z "$month_label" ] || [ -z "$day_of_week_label" ] || [ -z "$month_of_year_label" ]; then
+        echo "Language not supported or not found in the configuration file."
+        exit 1
+    fi
+
+    # Translate and display the date
+    echo "Today's date in ${language^} is: $day_of_week_label $day_label $current_day, $month_of_year_label $month_label"
+}
+
+# Check for command line arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $(basename $0) <language> [-d|--debug] [-l|--list]"
+    exit 1
+fi
+
+# Parse command line arguments
+language=${1,,}
+shift
+args=${1,,}
+while [[ "$args" ]]; do
+    case $args in
+        -d|--debug)
+            DEBUG=true
+            ;;
+        -l|--list)
+            list_languages
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 <language> [-d|--debug] [-l|--list]"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+# Call the function with the provided language
+translate_date "$language"
+
